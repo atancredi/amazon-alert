@@ -38,44 +38,6 @@ def plotDatePrice(productID, productTitle, data):
     plt.savefig(productID+'.png')
     return productID+'.png'
 
-# ----- Email Configuration ----------------------------------------------------
-
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-
-def sendEmail(product, graph, EMAIL_CREDENTIALS):
-    
-    # Gmail credentials
-    self = EMAIL_CREDENTIALS[0]
-    password = EMAIL_CREDENTIALS[1]    
-    fromAddr = EMAIL_CREDENTIALS[2]
-    toAddr = EMAIL_CREDENTIALS[3]
-    
-    # Handle base
-    msg = MIMEMultipart()
-    msg['From'] = fromAddr
-    msg['To'] = toAddr
-    msg['Subject'] = "Price Alert: " + product
-    msgText = MIMEText('<center><br><img src="cid:image"><br></center>', 'html')
-    msg.attach(msgText)
- 
-    # Embed image
-    image = open(graph, 'rb')
-    msgImage = MIMEImage(image.read())
-    msgImage.add_header('Content-ID', '<image>')
-    msg.attach(msgImage)
-    image.close()     
-
-    # Send email
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(self, password)
-    text = msg.as_string()
-    server.sendmail(fromAddr, toAddr, text)
-    server.quit()
-    
 # ----- Amazon API -------------------------------------------------------------
     
 from amazon.api import AmazonAPI    
